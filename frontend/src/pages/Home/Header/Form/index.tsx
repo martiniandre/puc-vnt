@@ -8,9 +8,6 @@ const emailReducer = (state: {value: string}, action: {type: string, value: stri
   if(action.type === 'USER_INPUT') {
       return { value: action.value, isValid: action.value.includes('@') };
   }
-  if (action.type === 'INPUT_BLUR'){
-      return { value: state.value, isValid: action.value.includes('@') };
-  }
   if( action.type === 'FORM_CLEANUP'){
       return { value: '', isValid: false};
   }
@@ -20,9 +17,6 @@ const emailReducer = (state: {value: string}, action: {type: string, value: stri
 const passwordReducer = (state: {value: string}, action: {type: string, value: string}) => {
   if(action.type === 'USER_INPUT') {
       return { value: action.value, isValid: action.value.trim().length > 8 };
-  }
-  if (action.type === 'INPUT_BLUR'){
-      return { value: state.value, isValid: action.value.trim().length > 8 };
   }
   if( action.type === 'FORM_CLEANUP'){
       return { value: '', isValid: false};
@@ -35,13 +29,17 @@ type FormProps = {
   onUserRegister: (user: User) => void
 }
 
-export const Form = ({ onUserRegister }: FormProps) => {
-  const [errors,setErrors] = useState(null)
+const initialUsername = {
+  firstName: '',
+  lastName: ''
+}
 
-  const [username,setUsername] = useState({
-    firstName: '',
-    lastName: '',
-  }) 
+const initialErrorState = { email: false, password: false }
+
+export const Form = ({ onUserRegister }: FormProps) => {
+  const [errors,setErrors] = useState(initialErrorState);
+
+  const [username,setUsername] = useState(initialUsername) 
 
   const [email, dispatchEmail] = useReducer(emailReducer, { value: '', isValid: false})
   const [password, dispatchPassword] = useReducer(passwordReducer, { value: '', isValid: false})
@@ -57,10 +55,12 @@ export const Form = ({ onUserRegister }: FormProps) => {
 
   const emailChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     dispatchEmail({ type: 'USER_INPUT', value: event.target.value})
+    setErrors({...errors, email: email.isValid})
 }
 
 const passwordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     dispatchPassword({ type: 'USER_INPUT', value: event.target.value})
+    setErrors({...errors, password: password.isValid})
 }
 
 
@@ -75,7 +75,9 @@ const passwordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     }
 
     onUserRegister(user)
-    console.log(user)
+    setUsername(initialUsername)
+    dispatchEmail({ type: 'FORM_CLEANUP',value:''})
+    dispatchPassword({ type: 'FORM_CLEANUP', value: '' })
   }
 
   return (
@@ -86,11 +88,12 @@ const passwordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         background: "white",
         color: 'black',
         padding: 5,
-        marginLeft: 'auto'
+        marginLeft: 'auto',
+        textAlign: 'center'
       }}
       onSubmit={handleSubmit}
     >
-      <Typography variant="h4">Sign up </Typography>
+      <Typography variant="h4" >Sign up </Typography>
       <Typography variant="subtitle1">Quick Sign Up</Typography>
       <Button>Sign up with Google</Button>
 
@@ -138,7 +141,6 @@ const passwordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
           />
         </Grid>
       </Grid>
-      {errors && <Typography variant="subtitle1">{errors}</Typography>}
       <Button variant="contained" sx={{width: '100%',marginTop: 1}} type="submit">Sign up</Button>  
     </Box>
   )

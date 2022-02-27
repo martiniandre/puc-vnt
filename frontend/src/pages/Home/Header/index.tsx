@@ -3,14 +3,25 @@ import { Information } from './Information'
 import { Form } from './Form'
 import { ContentBox } from '../../../components/ContentBox'
 import { User } from '../../../types/user'
-import { usePost } from '../../../hooks/customPost'
+import { CREATE_USER } from '../../../graphql/Mutations'
+import { useMutation } from '@apollo/client'
 
 export const HomeHeader = () => {
-  const { apiPost } = usePost('/user')
-
+  const [createUser, {error: err}] = useMutation(CREATE_USER)
 
   const onUserRegister = async (user: User) => {
-    await apiPost(user)
+   await  createUser({
+      variables: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          password: user.password
+      }
+    })
+
+    if(err){
+      console.log(err);
+    }
   }
 
 

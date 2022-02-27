@@ -1,19 +1,16 @@
 import { Box } from "@mui/material"
-import { Navbar } from "../../components/Navbar"
-import { Footer } from "../../components/Footer"
 import { HomeHeader } from "./Header"
 import { Reviews } from "./Reviews"
+import Layout from "../../containers"
 
 const Home = () => {
   return (
-    <Box>
-      <Navbar/>
+    <Layout>
       <HomeHeader/>
       <Box component="main" sx={{padding: "20px 0"}}>
         <Reviews/>
       </Box>
-      <Footer/>
-    </Box>
+    </Layout>
   )
 }
 

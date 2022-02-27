@@ -1,6 +1,7 @@
 import { Button, Grid, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { ChangeEvent, FormEvent, useReducer, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { User } from "../../../../types/user"
 import { CustomInput } from "./styles"
 
@@ -24,7 +25,6 @@ const passwordReducer = (state: {value: string}, action: {type: string, value: s
   return {value: '', isValid: false};
 }
 
-
 type FormProps = {
   onUserRegister: (user: User) => void
 }
@@ -37,6 +37,8 @@ const initialUsername = {
 const initialErrorState = { email: false, password: false }
 
 export const Form = ({ onUserRegister }: FormProps) => {
+  const { t } = useTranslation();
+
   const [errors,setErrors] = useState(initialErrorState);
 
   const [username,setUsername] = useState(initialUsername) 
@@ -93,11 +95,11 @@ const passwordChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
       }}
       onSubmit={handleSubmit}
     >
-      <Typography variant="h4" >Sign up </Typography>
-      <Typography variant="subtitle1">Quick Sign Up</Typography>
-      <Button>Sign up with Google</Button>
+      <Typography variant="h4" >{t('Login')}</Typography>
+      <Typography variant="subtitle1">{t('LoginFacil')}</Typography>
+      <Button>{t('GoogleLogin')}</Button>
 
-      <Typography variant="subtitle1">Or use your email address</Typography>
+      <Typography variant="subtitle1">{t('Email')}</Typography>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <CustomInput

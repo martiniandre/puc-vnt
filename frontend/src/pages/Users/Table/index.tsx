@@ -6,14 +6,18 @@ type TableProps = {
 };
 
 export const UserTable = ({ users }: TableProps) => {
-    console.log(users)
+
+  if(users.length === 0){
+    return <h1>Nenhum usuario cadastrado</h1>
+  }
+
+
   return (
     <TableContainer component={Paper} sx={{marginTop: 20}}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">First Name</TableCell>
+            <TableCell align="left">First Name</TableCell>
             <TableCell align="right">Last Name</TableCell>
             <TableCell align="right">Email</TableCell>
           </TableRow>

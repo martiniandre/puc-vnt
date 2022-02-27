@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 
 import { useEffect, useState } from "react";
+import { ContentBox } from "../../components/ContentBox";
 import Layout from "../../containers"
 import { LOAD_USERS } from "../../graphql/Queries";
 import { User } from "../../types/user";
@@ -27,7 +28,9 @@ const Users = () => {
 
     return (
         <Layout>
-            <UserTable users={users}/>
+            <ContentBox>
+                <UserTable users={users}/>
+            </ContentBox>
         </Layout>
     )
 }
